@@ -29,36 +29,84 @@
                 v-model="obj.email"
               />
               <CInput
-                description="Profile Password"
-                label="Password"
-                horizontal
-                autocomplete="password"
-                v-model="obj.password"
-              />
-              <CInput
                 description="Profile Phone"
                 label="Phone"
                 horizontal
                 autocomplete="phone"
                 v-model="obj.phone"
               />
-              <CSelect
-                label="Organization"
+              <CInput
+                description="Address 1"
+                label="Address 1"
                 horizontal
-                v-model="obj.organization.id"
-                :value.sync="obj.organization.id"
-                :options="organizationList"
-                placeholder="Please select"
+                autocomplete="address1"
+                v-model="obj.address1"
               />
-              <!-- <CSelect
+              <CInput
+                description="Address 2"
+                label="Address 2"
+                horizontal
+                autocomplete="address2"
+                v-model="obj.address2"
+              />
+              <CInput
+                description="Address 3"
+                label="Address 3"
+                horizontal
+                autocomplete="address3"
+                v-model="obj.address3"
+              />
+              <CInput
+                description="City"
+                label="City"
+                horizontal
+                autocomplete="city"
+                v-model="obj.city"
+              />
+              <CInput
+                description="Postcode"
+                label="Postcode"
+                horizontal
+                autocomplete="postcode"
+                v-model="obj.postcode"
+              />
+              <CSelect
+                label="State"
+                horizontal
+                :options="[
+                  '',
+                  'Johor',
+                  'Kedah',
+                  'Kelantan',
+                  'Melaka',
+                  'Negeri Sembilan',
+                  'Pahang',
+                  'Pulau Pinang',
+                  'Perak',
+                  'Perlis',
+                  'Sabah',
+                  'Sarawak',
+                  'Selangor',
+                  'Terengganu',
+                  'Kuala Lumpur',
+                  'Labuan',
+                  'Putrajaya',
+                ]"
+                :value.sync="obj.state"
+              />
+              <CSelect
+                label="Country"
+                horizontal
+                :options="['', 'Malaysia']"
+                :value.sync="obj.country"
+              />
+              <CSelect
                 label="Role"
                 horizontal
-                v-model="obj.role_code"
-                :value.sync="obj.role_code"
-                :options="roleList"
-                placeholder="Please select"
-              /> -->
-              <CRow form class="form-group">
+                :options="['normal', 'admin']"
+                :value.sync="obj.role"
+              />
+              <!-- <CRow form class="form-group">
                 <CCol tag="label" sm="3" class="col-form-label">
                   Organization Type
                 </CCol>
@@ -72,7 +120,7 @@
                     @click="onRoleClick(item.value, $event)"
                   />
                 </CCol>
-              </CRow>
+              </CRow> -->
             </CForm>
           </CCardBody>
           <CCardFooter>
@@ -96,114 +144,61 @@ export default {
   name: "Profile",
   data: () => {
     return {
-      organizationList: [],
-      roleList: [],
+      // organizationList: [],
+      // roleList: [],
       api: new TatApi(),
       obj: {
-        id: "",
-        name: "",
-        email: "",
-        password: "",
-        phone: "",
-        organization: {
-          id: "",
-        },
-        roleList: [],
-        isActive: "",
-        customJsonData: "",
+        // id: "",
+        // name: "",
+        // email: "",
+        // password: "",
+        // phone: "",
+        // // organization: {
+        // //   id: "",
+        // // },
+        // // roleList: [],
+        // isActive: "",
+        // customJsonData: "",
       },
     };
   },
   mounted() {
     var self = this;
-    self.refreshOrganization();
+    // self.refreshOrganization();
     // self.refreshRole();
     if (self.$route.params.id) {
       this.api.getProfile(self.$route.params.id).then((response) => {
         self.obj = response.data;
-        self.api.getRoleList().then((response) => {
-          for (var i in response.data) {
-            var isAvailable = self.containsObject(
-              response.data[i].id,
-              self.obj.roleList
-            );
-            self.roleList.push({
-              value: response.data[i].id,
-              label: response.data[i].name,
-              checked: isAvailable,
-            });
-          }
-        });
-      });
-    } else {
-      self.api.getRoleList().then((response) => {
-        for (var i in response.data) {
-          self.roleList.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-            checked: false,
-          });
-        }
+        console.log(self.obj);
+        // self.api.getRoleList().then((response) => {
+        //   for (var i in response.data) {
+        //     var isAvailable = self.containsObject(
+        //       response.data[i].id,
+        //       self.obj.roleList
+        //     );
+        //     self.roleList.push({
+        //       value: response.data[i].id,
+        //       label: response.data[i].name,
+        //       checked: isAvailable,
+        //     });
+        //   }
+        // });
       });
     }
+    // else
+    // {
+    //   self.api.getRoleList().then((response) => {
+    //     for (var i in response.data) {
+    //       self.roleList.push({
+    //         value: response.data[i].id,
+    //         label: response.data[i].name,
+    //         checked: false,
+    //       });
+    //     }
+    //   });
+    // }
   },
   methods: {
-    onOrganizationClick(event) {
-      console.log(event);
-    },
-    onRoleClick(value, event) {
-      var self = this;
-      if (event.target.checked) {
-        if (!self.containsObject(value, self.obj.roleList)) {
-          self.obj.roleList.push({
-            id: value,
-          });
-        }
-      } else {
-        self.removeObject(value, self.obj.roleList);
-      }
-    },
-    removeObject(obj, list) {
-      var removeIndex = list
-        .map(function(item) {
-          return item.id;
-        })
-        .indexOf(obj);
-      list.splice(removeIndex, 1);
-    },
-    containsObject(obj, list) {
-      var i;
-      for (i = 0; i < list.length; i++) {
-        if (list[i].id === obj) {
-          return true;
-        }
-      }
-
-      return false;
-    },
-    refreshOrganization() {
-      var self = this;
-      self.api.getOrganizationList().then((response) => {
-        for (var i in response.data) {
-          self.organizationList.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-      });
-    },
-    refreshRole() {
-      var self = this;
-      self.api.getRoleList().then((response) => {
-        for (var i in response.data) {
-          self.roleList.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-      });
-    },
-
     onSubmit(evt) {
       evt.preventDefault();
       var self = this;

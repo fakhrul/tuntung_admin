@@ -9,16 +9,9 @@ class AuthService {
             this.user = userData ? JSON.parse(userData) : null;
             if (this.token !== null) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
-                console.log(this.token)
                 axios.defaults.headers.common['api-token'] = this.token;
-                
-                // this.getUser();
             }
         }
-        // if (this.token) {
-        //     axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
-        //     this.getUser();
-        // }
     }
 
     getUser() {
@@ -29,7 +22,6 @@ class AuthService {
     }
 
     doLogin(data) {
-        console.log(data);
         var url = apiUrl + 'login';
         return api.call('post', url, data)
             .then((response) => {
@@ -39,9 +31,16 @@ class AuthService {
 
     }
 
+    doLoginAdmin(data) {
+        var url = apiUrl + 'loginAdmin';
+        return api.call('post', url, data)
+            .then((response) => {
+                return response.data
+            });
+
+    }
+
     recordLogin(token, user) {
-        console.log(token);
-        console.log(user);
         window.localStorage.setItem('token', token);
         window.localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;

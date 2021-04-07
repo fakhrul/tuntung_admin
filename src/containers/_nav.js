@@ -14,45 +14,51 @@ export default [
       },
       {
         _name: 'CSidebarNavTitle',
-        _children: ['Organization']
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'OrganizationType',
-        to: '/admin/organizationTypelist',
-        icon: 'cil-calculator'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Organization',
-        to: '/admin/organizationlist',
-        icon: 'cil-calculator'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Area',
-        to: '/admin/arealist',
-        icon: 'cil-calculator'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Activity',
-        to: '/admin/activitylist',
-        icon: 'cil-calculator'
-      },
-      {
-        _name: 'CSidebarNavTitle',
-        _children: ['Profile']
+        _children: ['Administration']
       },
       {
         _name: 'CSidebarNavItem',
         name: 'Profile',
         to: '/admin/profilelist',
+        icon: 'cil-calculator'
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Business Category',
+        to: '/admin/organizationlist',
+        icon: 'cil-calculator'
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Audience',
+        to: '/admin/arealist',
+        icon: 'cil-calculator'
+      },
+      // {
+      //   _name: 'CSidebarNavItem',
+      //   name: 'Activity',
+      //   to: '/admin/activitylist',
+      //   icon: 'cil-calculator'
+      // },
+      {
+        _name: 'CSidebarNavTitle',
+        _children: ['Advertiser']
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Advertiser',
+        to: '/admin/profilelist',
         icon: 'cil-puzzle'
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Role',
+        name: 'Campaign',
+        to: '/admin/rolelist',
+        icon: 'cil-puzzle'
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Ads Images',
         to: '/admin/rolelist',
         icon: 'cil-puzzle'
       },
@@ -64,41 +70,51 @@ export default [
       // },
       {
         _name: 'CSidebarNavTitle',
-        _children: ['Product']
+        _children: ['Walker']
       },
 
       {
         _name: 'CSidebarNavItem',
-        name: 'Category',
+        name: 'Walker',
         to: '/track/categorylist',
         icon: 'cil-drop'
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Product',
+        name: 'Campaign Enrollment',
         to: '/track/productlist',
         icon: 'cil-drop'
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Certification',
+        name: 'Activity',
         to: '/track/certificationlist',
         icon: 'cil-drop'
       },
       {
         _name: 'CSidebarNavTitle',
-        _children: ['Track And Trace']
+        _children: ['Accounting']
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Track List',
+        name: 'Advertiser',
         to: '/track/tracklist',
         icon: 'cil-cursor'
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Track Update',
+        name: 'Walker',
         to: '/track/trackupdate',
+        icon: 'cil-cursor'
+      },
+      {
+        _name: 'CSidebarNavTitle',
+        _children: ['Others']
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Helpdesk',
+        to: '/track/tracklist',
         icon: 'cil-cursor'
       },
       // {

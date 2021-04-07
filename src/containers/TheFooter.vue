@@ -1,8 +1,10 @@
 <template>
   <CFooter :fixed="false">
     <div>
-      <a href="https://www.sirim.my/" target="_blank">SIRIM Blockchain</a>
-      <span class="ml-1">&copy; {{new Date().getFullYear()}}</span>
+      <a href="https://www.tuntung.com" target="_blank"
+        >Tuntung Technology Sdn Bhd</a
+      >
+      <span class="ml-1">&copy; {{ new Date().getFullYear() }}</span>
     </div>
     <div class="mfs-auto">
       <span class="mr-1" target="_blank">Powered by</span>
@@ -13,6 +15,6 @@
 
 <script>
 export default {
-  name: 'TheFooter'
-}
+  name: "TheFooter",
+};
 </script>

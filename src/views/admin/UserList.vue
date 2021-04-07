@@ -2,7 +2,7 @@
   <CRow>
     <CCol sm="12">
       <CCard>
-        <CCardHeader> <strong> Profile </strong> List </CCardHeader>
+        <CCardHeader> <strong> User </strong> List </CCardHeader>
         <CCardBody>
           <CDataTable
             :items="items"
@@ -43,31 +43,10 @@
               >
                 <CCardBody>
                   <CMedia :aside-image-props="{ height: 102 }">
+                    <h4>
+                      {{ item.code }}
+                    </h4>
                     <p class="text-muted">Name: {{ item.name }}</p>
-                    <p class="text-muted">Email: {{ item.email }}</p>
-                    <p class="text-muted">Phone: {{ item.phone }}</p>
-                    <p class="text-muted">Address:</p>
-                    <p class="text-muted">{{ item.address1 }}</p>
-                    <p class="text-muted">{{ item.address2 }}</p>
-                    <p class="text-muted">{{ item.address3 }}</p>
-                    <p class="text-muted">City: {{ item.city }}</p>
-                    <p class="text-muted">Postcode: {{ item.postcode }}</p>
-                    <p class="text-muted">State: {{ item.state }}</p>
-                    <p class="text-muted">Country: {{ item.country }}</p>
-                    <p class="text-muted">Role: {{ item.role }}</p>
-                    <!-- <p class="text-muted">System Id : {{ item.id }}</p>
-                    <p class="text-muted">System User Id: {{ item.user_id }}</p> -->
-                    <!-- <p class="text-muted">
-                      Org. Name: {{ item.organization.name }}
-                    </p>
-                    <p class="text-muted">
-                      Roles:
-                    </p>
-                    <ul id="example-1">
-                      <li v-for="item in item.roleList" :key="item.id">
-                        {{ item.name }}
-                      </li>
-                    </ul> -->
                     <CButton
                       size="sm"
                       color="info"
@@ -114,11 +93,10 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
-  { key: "email", _style: "min-width:100px;" },
+  { key: "organizationType_name", _style: "min-width:100px;" },
   { key: "name", _style: "min-width:200px;" },
-  { key: "role", _style: "min-width:200px;" },
-  // { key: "phone", _style: "min-width:100px;" },
-  // { key: "id", _style: "min-width:50px" },
+  { key: "isActive", _style: "min-width:200px;" },
+  { key: "id", _style: "min-width:50px" },
   {
     key: "show_details",
     label: "",
@@ -129,7 +107,7 @@ const fields = [
 ];
 
 export default {
-  name: "ProfileList",
+  name: "UserList",
   data() {
     return {
       items: items.map((item, id) => {
@@ -157,21 +135,20 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getProfileList().then((response) => {
+      self.api.getUserList().then((response) => {
         self.items = response.data;
-        console.log(self.items);
       });
     },
     onEdit(item) {
       var self = this;
       self.$router.push({
-        path: `/admin/profile/${item.id}`,
+        path: `/admin/user/${item.id}`,
       });
     },
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteProfile(self.itemToDelete.id).then((response) => {
+        this.api.deleteUser(self.itemToDelete.id).then((response) => {
           self.refreshTable();
         });
       }
@@ -183,7 +160,7 @@ export default {
       self.warningModal = true;
     },
     addNew() {
-      this.$router.push({ path: "/admin/profile" });
+      this.$router.push({ path: "/admin/user" });
     },
   },
 };

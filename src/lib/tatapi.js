@@ -1,5 +1,5 @@
 // let apiUrl = 'http://localhost:8000/api/';
-let apiUrl = 'http://localhost:5005/api/eth/';
+let apiUrl = 'http://localhost:5005/api/';
 
 class TatApi {
 
@@ -10,8 +10,8 @@ class TatApi {
                 return data
             });
     }
-   
-    getProfileList () {
+
+    getProfileList() {
         var url = apiUrl + 'profile';
         return api.call('get', url)
             .then(({ data }) => {
@@ -19,14 +19,14 @@ class TatApi {
             });
     }
 
-    getProfileByOrganization (id) {
+    getProfileByOrganization(id) {
         var url = apiUrl + 'profileByOrganization/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
-    
+
 
     deleteProfile(id) {
         var url = apiUrl + 'profile/';
@@ -101,7 +101,7 @@ class TatApi {
             });
 
     }
-        
+
     getRole(id) {
         var url = apiUrl + 'role/';
         return api.call('get', url + id)
@@ -109,8 +109,8 @@ class TatApi {
                 return data
             });
     }
-   
-    getRoleList () {
+
+    getRoleList() {
         var url = apiUrl + 'role';
         return api.call('get', url)
             .then(({ data }) => {
@@ -149,7 +149,7 @@ class TatApi {
                 return data
             });
     }
-   
+
     getOrganizationTypeList() {
         var url = apiUrl + 'organizationType';
         return api.call('get', url)
@@ -171,7 +171,7 @@ class TatApi {
             .then(({ data }) => {
                 return data
             });
-    }    
+    }
 
 
     createOrganizationType(data) {
@@ -182,7 +182,7 @@ class TatApi {
             });
 
     }
-    
+
 
     getOrganization(id) {
         var url = apiUrl + 'organization/';
@@ -191,7 +191,7 @@ class TatApi {
                 return data
             });
     }
-   
+
     getOrganizationList() {
         var url = apiUrl + 'organization';
         return api.call('get', url)
@@ -287,7 +287,7 @@ class TatApi {
                 return data
             });
     }
-    
+
 
     deleteActivity(id) {
         var url = apiUrl + 'activity/';
@@ -450,10 +450,10 @@ class TatApi {
                 return data
             });
     }
-    
+
     getProductTrail(id) {
         var url = apiUrl + 'trail/';
-        return api.call('get', url +id)
+        return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
@@ -461,10 +461,50 @@ class TatApi {
 
     getQrImage(id) {
         var url = apiUrl + 'generateQr/';
-        return api.call('get', url +id)
+        return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
+    }
+
+    //User
+    getUserList() {
+        var url = apiUrl + 'auth';
+        return api.call('get', url)
+            .then(({ data }) => {
+                return data
+            });
+    }
+    getUser(id) {
+        var url = apiUrl + 'auth/';
+        return api.call('get', url + id)
+            .then(({ data }) => {
+                return data
+            });
+    }
+    deleteUser(id) {
+        var url = apiUrl + 'auth/';
+        return api.call('delete', url + id)
+            .then(({ data }) => {
+                return data
+            });
+    }
+
+    updateUser(data) {
+        var url = apiUrl + 'auth/';
+        return api.call('put', url + data.id, data)
+            .then(({ data }) => {
+                return data
+            });
+    }
+
+    createUser(data) {
+        var url = apiUrl + 'auth';
+        return api.call('post', url, data)
+            .then(({ data }) => {
+                return data
+            });
+
     }
 }
 

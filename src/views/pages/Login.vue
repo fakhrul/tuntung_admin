@@ -50,7 +50,10 @@
               </CCardBody>
               <CCardFooter>
                 <p>Download Adnroid APK</p>
-                <CLink href="https://github.com/fakhrul/track_and_trace_mobile/releases/download/v1.1/tracks-app-6042d2d6b5434d40b60011cd722572c1-signed.apk" class="card-header-action btn-setting">
+                <CLink
+                  href="https://github.com/fakhrul/track_and_trace_mobile/releases/download/v1.1/tracks-app-6042d2d6b5434d40b60011cd722572c1-signed.apk"
+                  class="card-header-action btn-setting"
+                >
                   v 1.0
                 </CLink>
               </CCardFooter>
@@ -109,8 +112,8 @@ export default {
         email: self.obj.email,
         password: self.obj.password,
       };
-      auth.doLogin(data).then((response) => {
-        auth.recordLogin(response.token, response.user);
+      auth.doLoginAdmin(data).then((response) => {
+        auth.recordLogin(response.token, response.profile);
         self.$router.push({ path: "/dashboard" });
         // self.$router.push({ path: "/" });
       });
