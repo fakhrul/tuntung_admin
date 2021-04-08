@@ -74,8 +74,8 @@ const LocationList = () => import('@/views/admin/LocationList')
 const Business = () => import('@/views/admin/Business')
 const BusinessList = () => import('@/views/admin/BusinessList')
 
-const OrganizationType = () => import('@/views/admin/OrganizationType')
-const OrganizationTypeList = () => import('@/views/admin/OrganizationTypeList')
+const Advertiser = () => import('@/views/admin/Advertiser')
+const AdvertiserList = () => import('@/views/admin/AdvertiserList')
 
 const Area = () => import('@/views/admin/Area')
 const AreaList = () => import('@/views/admin/AreaList')
@@ -211,19 +211,24 @@ function configRoutes() {
               component: LocationList
             },
             {
-              path: 'organizationTypeList',
-              name: 'OrganizationTypeList',
-              component: OrganizationTypeList
+              path: 'advertiserList',
+              name: 'AdvertiserList',
+              component: AdvertiserList
             },
             {
-              path: 'organizationType',
-              name: 'OrganizationType',
-              component: OrganizationType
+              path: 'advertiser',
+              name: 'Advertiser',
+              component: Advertiser
             },
             {
-              path: 'organizationType/:id',
-              name: 'OrganizationType',
-              component: OrganizationType
+              path: 'advertiser/:id',
+              name: 'Advertiser',
+              component: Advertiser
+            },
+            {
+              path: 'advertiser/:id/profile/:profileId/email/:profileEmail',
+              name: 'Advertiser',
+              component: Advertiser
             },
             {
               path: 'businesslist',

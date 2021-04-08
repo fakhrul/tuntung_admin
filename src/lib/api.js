@@ -8,8 +8,8 @@ class Api {
             this.user = userData ? JSON.parse(userData) : null;
             if (this.token !== null) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
-                console.log('token')
-                console.log(this.token)
+                // console.log('token')
+                // console.log(this.token)
                 axios.defaults.headers.common['api-token'] = this.token;
             }
         }
@@ -24,12 +24,12 @@ class Api {
             axios[requestType](url, data)
                 .then(response => {
                     resolve(response);
+
                 })
                 .catch(({ response }) => {
                     if (response.status === 401) {
                         auth.logout();
                     }
-
                     reject(response);
                 });
         });

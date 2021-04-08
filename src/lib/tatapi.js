@@ -54,48 +54,48 @@ class TatApi {
 
     }
 
-    getAreaList() {
-        var url = apiUrl + 'area';
+    getAdvertiserList() {
+        var url = apiUrl + 'advertiser';
         return api.call('get', url)
             .then(({ data }) => {
                 return data
             });
     }
 
-    getArea(id) {
-        var url = apiUrl + 'area/';
+    getAdvertiser(id) {
+        var url = apiUrl + 'advertiser/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    getAreaByOrganization(id) {
-        var url = apiUrl + 'areaByOrganization/';
-        return api.call('get', url + id)
-            .then(({ data }) => {
-                return data
-            });
-    }
+    // getAdvertiserByOrganization(id) {
+    //     var url = apiUrl + 'advertiserByOrganization/';
+    //     return api.call('get', url + id)
+    //         .then(({ data }) => {
+    //             return data
+    //         });
+    // }
 
-    deleteArea(id) {
-        var url = apiUrl + 'area/';
+    deleteAdvertiser(id) {
+        var url = apiUrl + 'advertiser/';
         return api.call('delete', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    updateArea(data) {
-        var url = apiUrl + 'area/';
+    updateAdvertiser(data) {
+        var url = apiUrl + 'advertiser/';
         return api.call('put', url + data.id, data)
             .then(({ data }) => {
                 return data
             });
     }
 
-    createArea(data) {
-        var url = apiUrl + 'area';
+    createAdvertiser(data) {
+        var url = apiUrl + 'advertiser';
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

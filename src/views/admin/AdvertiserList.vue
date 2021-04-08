@@ -2,7 +2,7 @@
   <CRow>
     <CCol sm="12">
       <CCard>
-        <CCardHeader> <strong> Profile </strong> List </CCardHeader>
+        <CCardHeader> <strong> Advertiser </strong> List </CCardHeader>
         <CCardBody>
           <CDataTable
             :items="items"
@@ -43,7 +43,12 @@
               >
                 <CCardBody>
                   <CMedia :aside-image-props="{ height: 102 }">
-                    <p class="text-muted">Name: {{ item.name }}</p>
+                    <p class="text-muted">Id: {{ item.id }}</p>
+                    <p class="text-muted">Owner Id: {{ item.profile_id }}</p>
+                    <p class="text-muted">
+                      Owner Email: {{ item.profile_email }}
+                    </p>
+                    <p class="text-muted">Organization Name: {{ item.name }}</p>
                     <p class="text-muted">Email: {{ item.email }}</p>
                     <p class="text-muted">Phone: {{ item.phone }}</p>
                     <p class="text-muted">Address:</p>
@@ -54,32 +59,19 @@
                     <p class="text-muted">Postcode: {{ item.postcode }}</p>
                     <p class="text-muted">State: {{ item.state }}</p>
                     <p class="text-muted">Country: {{ item.country }}</p>
-                    <p class="text-muted">Role: {{ item.role }}</p>
-                    <!-- <p class="text-muted">System Id : {{ item.id }}</p>
-                    <p class="text-muted">System User Id: {{ item.user_id }}</p> -->
-                    <!-- <p class="text-muted">
-                      Org. Name: {{ item.organization.name }}
+                    <p class="text-muted">
+                      Contact Person Name: {{ item.contact_name }}
                     </p>
                     <p class="text-muted">
-                      Roles:
+                      Contact Person Email: {{ item.contact_email }}
                     </p>
-                    <ul id="example-1">
-                      <li v-for="item in item.roleList" :key="item.id">
-                        {{ item.name }}
-                      </li>
-                    </ul> -->
+                    <p class="text-muted">
+                      Contact Person Phone: {{ item.contact_phone }}
+                    </p>
                     <CButton
                       size="sm"
                       color="info"
-                      class="ml-1"
-                      @click="onAddAdvertiser(item)"
-                    >
-                      Add Advertiser
-                    </CButton>
-                    <CButton
-                      size="sm"
-                      color="info"
-                      class="ml-1"
+                      class=""
                       @click="onEdit(item)"
                     >
                       Edit
@@ -99,9 +91,13 @@
           </CDataTable>
         </CCardBody>
         <CCardFooter>
-          <CButton type="submit" size="sm" color="primary" @click="addNew"
+          <!-- <CButton type="submit" size="sm" color="primary" @click="addNew"
             ><CIcon name="cil-check-circle" /> Add New</CButton
-          >
+          > -->
+          <p>
+            NOTES: To add new advertiser, you must go to profile list and show
+            details.
+          </p>
         </CCardFooter>
       </CCard>
       <CModal
@@ -122,12 +118,10 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
-  { key: "id", _style: "min-width:100px;" },
-  { key: "email", _style: "min-width:100px;" },
+  { key: "id", _style: "min-width:200px;" },
+  // { key: "profile_id", _style: "min-width:200px;" },
+  { key: "profile_email", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
-  { key: "role", _style: "min-width:200px;" },
-  // { key: "phone", _style: "min-width:100px;" },
-  // { key: "id", _style: "min-width:50px" },
   {
     key: "show_details",
     label: "",
@@ -138,7 +132,7 @@ const fields = [
 ];
 
 export default {
-  name: "ProfileList",
+  name: "AdvertiserList",
   data() {
     return {
       items: items.map((item, id) => {
@@ -166,27 +160,20 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getProfileList().then((response) => {
+      self.api.getAdvertiserList().then((response) => {
         self.items = response.data;
-        console.log(self.items);
-      });
-    },
-    onAddAdvertiser(item) {
-      var self = this;
-      self.$router.push({
-        path: `/admin/advertiser/0/profile/${item.id}/email/${item.email}`,
       });
     },
     onEdit(item) {
       var self = this;
       self.$router.push({
-        path: `/admin/profile/${item.id}`,
+        path: `/admin/advertiser/${item.id}`,
       });
     },
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteProfile(self.itemToDelete.id).then((response) => {
+        this.api.deleteAdvertiser(self.itemToDelete.id).then((response) => {
           self.refreshTable();
         });
       }
@@ -198,7 +185,7 @@ export default {
       self.warningModal = true;
     },
     addNew() {
-      this.$router.push({ path: "/admin/profile" });
+      this.$router.push({ path: "/admin/advertiser" });
     },
   },
 };

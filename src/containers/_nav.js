@@ -47,7 +47,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Advertiser',
-        to: '/admin/profilelist',
+        to: '/admin/advertiserlist',
         icon: 'cil-puzzle'
       },
       {
