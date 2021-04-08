@@ -103,39 +103,39 @@ class TatApi {
 
     }
 
-    getRole(id) {
-        var url = apiUrl + 'role/';
+    getAudience(id) {
+        var url = apiUrl + 'audience/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    getRoleList() {
-        var url = apiUrl + 'role';
+    getAudienceList() {
+        var url = apiUrl + 'audience';
         return api.call('get', url)
             .then(({ data }) => {
                 return data
             });
     }
-    deleteRole(id) {
-        var url = apiUrl + 'role/';
+    deleteAudience(id) {
+        var url = apiUrl + 'audience/';
         return api.call('delete', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    updateRole(data) {
-        var url = apiUrl + 'role/';
+    updateAudience(data) {
+        var url = apiUrl + 'audience/';
         return api.call('put', url + data.id, data)
             .then(({ data }) => {
                 return data
             });
     }
 
-    createRole(data) {
-        var url = apiUrl + 'role';
+    createAudience(data) {
+        var url = apiUrl + 'audience';
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

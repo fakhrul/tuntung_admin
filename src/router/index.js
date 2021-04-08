@@ -83,8 +83,8 @@ const AreaList = () => import('@/views/admin/AreaList')
 const Profile = () => import('@/views/admin/Profile')
 const ProfileList = () => import('@/views/admin/ProfileList')
 
-const Role = () => import('@/views/admin/Role')
-const RoleList = () => import('@/views/admin/RoleList')
+const Audience = () => import('@/views/admin/Audience')
+const AudienceList = () => import('@/views/admin/AudienceList')
 
 const Category = () => import('@/views/track/Category')
 const CategoryList = () => import('@/views/track/CategoryList')
@@ -271,18 +271,18 @@ function configRoutes() {
               component: ProfileList
             },
             {
-              path: 'role',
-              name: 'Role',
-              component: Role
+              path: 'audience',
+              name: 'Audience',
+              component: Audience
             },
             {
-              path: 'role/:id',
-              name: 'Role',
-              component: Role
+              path: 'audience/:id',
+              name: 'Audience',
+              component: Audience
             }, {
-              path: 'rolelist',
-              name: 'RoleList',
-              component: RoleList
+              path: 'audiencelist',
+              name: 'AudienceList',
+              component: AudienceList
             },
 
           ]

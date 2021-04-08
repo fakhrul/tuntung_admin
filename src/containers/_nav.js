@@ -31,7 +31,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Audience',
-        to: '/admin/arealist',
+        to: '/admin/audiencelist',
         icon: 'cil-calculator'
       },
       // {
