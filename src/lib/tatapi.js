@@ -185,39 +185,39 @@ class TatApi {
     }
 
 
-    getOrganization(id) {
-        var url = apiUrl + 'organization/';
+    getBusiness(id) {
+        var url = apiUrl + 'business/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    getOrganizationList() {
-        var url = apiUrl + 'organization';
+    getBusinessList() {
+        var url = apiUrl + 'business';
         return api.call('get', url)
             .then(({ data }) => {
                 return data
             });
     }
-    deleteOrganization(id) {
-        var url = apiUrl + 'organization/';
+    deleteBusiness(id) {
+        var url = apiUrl + 'business/';
         return api.call('delete', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    updateOrganization(data) {
-        var url = apiUrl + 'organization/';
+    updateBusiness(data) {
+        var url = apiUrl + 'business/';
         return api.call('put', url + data.id, data)
             .then(({ data }) => {
                 return data
             });
     }
 
-    createOrganization(data) {
-        var url = apiUrl + 'organization';
+    createBusiness(data) {
+        var url = apiUrl + 'business';
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

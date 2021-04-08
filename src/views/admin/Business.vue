@@ -14,14 +14,14 @@
                 autocomplete="name"
                 v-model="obj.name"
               />
-              <CSelect
+              <!-- <CSelect
                 label="Organization"
                 horizontal
                 v-model="obj.organizationType.id"
                 :value.sync="obj.organizationType.id"
                 :options="organizationTypeList"
                 placeholder="Please select"
-              />
+              /> -->
             </CForm>
           </CCardBody>
           <CCardFooter>
@@ -50,17 +50,17 @@ export default {
       obj: {
         id: "",
         name: "",
-        organizationType: {
-          id: "",
-        },
-        isActive: "",
-        customJsonData: "",
+        // organizationType: {
+        //   id: "",
+        // },
+        // isActive: "",
+        // customJsonData: "",
       },
     };
   },
   mounted() {
     var self = this;
-    self.refreshOrganizationType();
+    // self.refreshOrganizationType();
     if (self.$route.params.id) {
       this.api.getBusiness(self.$route.params.id).then((response) => {
         self.obj = response.data;
@@ -68,17 +68,17 @@ export default {
     }
   },
   methods: {
-    refreshOrganizationType() {
-      var self = this;
-      self.api.getOrganizationTypeList().then((response) => {
-        for (var i in response.data) {
-          self.organizationTypeList.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-      });
-    },
+    // refreshOrganizationType() {
+    //   var self = this;
+    //   self.api.getOrganizationTypeList().then((response) => {
+    //     for (var i in response.data) {
+    //       self.organizationTypeList.push({
+    //         value: response.data[i].id,
+    //         label: response.data[i].name,
+    //       });
+    //     }
+    //   });
+    // },
     onSubmit(evt) {
       evt.preventDefault();
       var self = this;
