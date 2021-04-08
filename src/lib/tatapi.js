@@ -1,4 +1,3 @@
-// let apiUrl = 'http://localhost:8000/api/';
 let apiUrl = 'http://localhost:5005/api/';
 
 class TatApi {
@@ -46,6 +45,8 @@ class TatApi {
 
     createProfile(data) {
         var url = apiUrl + 'profile';
+        console.log(url)
+        console.log(data)
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

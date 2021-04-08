@@ -25,7 +25,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Business Category',
-        to: '/admin/organizationlist',
+        to: '/admin/businesslist',
         icon: 'cil-calculator'
       },
       {

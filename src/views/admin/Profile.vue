@@ -7,13 +7,6 @@
           <CCardBody>
             <CForm>
               <CInput label="Id" v-model="obj.id" horizontal plaintext />
-              <!-- <CInput
-                description="Profile Code"
-                label="Code"
-                horizontal
-                autocomplete="code"
-                v-model="obj.code"
-              /> -->
               <CInput
                 description="Profile Name"
                 label="Name"
@@ -27,6 +20,27 @@
                 horizontal
                 autocomplete="email"
                 v-model="obj.email"
+              />
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  Reset Password?
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    class="mr-1"
+                    color="primary"
+                    :checked.sync="isResetPassword"
+                    :disabled="isDisableResetPassword"
+                  />
+                </CCol>
+              </CRow>
+              <CInput
+                description="Please specifiy your new password"
+                label="Password"
+                horizontal
+                autocomplete="password"
+                v-model="password"
+                v-if="isResetPassword"
               />
               <CInput
                 description="Profile Phone"
@@ -147,11 +161,14 @@ export default {
       // organizationList: [],
       // roleList: [],
       api: new TatApi(),
+      password: "",
+      isResetPassword: false,
+      isDisableResetPassword: false,
       obj: {
-        // id: "",
+        id: "",
         // name: "",
-        // email: "",
-        // password: "",
+        email: "",
+        password: "",
         // phone: "",
         // // organization: {
         // //   id: "",
@@ -184,24 +201,29 @@ export default {
         //   }
         // });
       });
+    } else {
+      self.isResetPassword = true;
+      self.isDisableResetPassword = true;
+      self.password = "tuntung@123";
+      // self.api.getRoleList().then((response) => {
+      //   for (var i in response.data) {
+      //     self.roleList.push({
+      //       value: response.data[i].id,
+      //       label: response.data[i].name,
+      //       checked: false,
+      //     });
+      //   }
+      // });
     }
-    // else
-    // {
-    //   self.api.getRoleList().then((response) => {
-    //     for (var i in response.data) {
-    //       self.roleList.push({
-    //         value: response.data[i].id,
-    //         label: response.data[i].name,
-    //         checked: false,
-    //       });
-    //     }
-    //   });
-    // }
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
       var self = this;
+      if (self.isResetPassword && self.password != "") {
+        self.obj.password = self.password;
+      }
+
       if (self.obj.id == "") {
         this.api.createProfile(self.obj).then((response) => {
           self.obj = {};
