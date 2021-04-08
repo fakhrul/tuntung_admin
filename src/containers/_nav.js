@@ -53,7 +53,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Campaign',
-        to: '/admin/rolelist',
+        to: '/admin/campaignlist',
         icon: 'cil-puzzle'
       },
       {

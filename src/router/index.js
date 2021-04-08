@@ -65,8 +65,8 @@ const CustomPage = () => import('@/views/theme/CustomPage')
 const Activity = () => import('@/views/admin/Activity')
 const ActivityList = () => import('@/views/admin/ActivityList')
 
-const Location = () => import('@/views/admin/Location')
-const LocationList = () => import('@/views/admin/LocationList')
+const Campaign = () => import('@/views/admin/Campaign')
+const CampaignList = () => import('@/views/admin/CampaignList')
 
 // const Organization = () => import('@/views/admin/Organization')
 // const OrganizationList = () => import('@/views/admin/OrganizationList')
@@ -196,19 +196,24 @@ function configRoutes() {
               component: ActivityList
             },
             {
-              path: 'location',
-              name: 'Location',
-              component: Location
+              path: 'campaign',
+              name: 'Campaign',
+              component: Campaign
             },
             {
-              path: 'location/:id',
-              name: 'Location',
-              component: Location
+              path: 'campaign/:id',
+              name: 'Campaign',
+              component: Campaign
             },
             {
-              path: 'locationlist',
-              name: 'LocationList',
-              component: LocationList
+              path: 'campaign/:id/advertiser/:advertiserId',
+              name: 'Campaign',
+              component: Campaign
+            },
+            {
+              path: 'campaignlist',
+              name: 'CampaignList',
+              component: CampaignList
             },
             {
               path: 'advertiserList',

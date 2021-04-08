@@ -2,7 +2,7 @@
   <CRow>
     <CCol sm="12">
       <CCard>
-        <CCardHeader> <strong> Advertiser </strong> List </CCardHeader>
+        <CCardHeader> <strong> Campaign </strong> List </CCardHeader>
         <CCardBody>
           <CDataTable
             :items="items"
@@ -71,15 +71,7 @@
                     <CButton
                       size="sm"
                       color="info"
-                      class="ml-1"
-                      @click="onAddCampaign(item)"
-                    >
-                      Add Advertiser
-                    </CButton>
-                    <CButton
-                      size="sm"
-                      color="info"
-                      class="ml-1"
+                      class=""
                       @click="onEdit(item)"
                     >
                       Edit
@@ -103,7 +95,7 @@
             ><CIcon name="cil-check-circle" /> Add New</CButton
           > -->
           <p>
-            NOTES: To add new advertiser, you must go to profile list and show
+            NOTES: To add new campaign, you must go to profile list and show
             details.
           </p>
         </CCardFooter>
@@ -140,7 +132,7 @@ const fields = [
 ];
 
 export default {
-  name: "AdvertiserList",
+  name: "CampaignList",
   data() {
     return {
       items: items.map((item, id) => {
@@ -168,20 +160,20 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getAdvertiserList().then((response) => {
+      self.api.getCampaignList().then((response) => {
         self.items = response.data;
       });
     },
     onEdit(item) {
       var self = this;
       self.$router.push({
-        path: `/admin/advertiser/${item.id}`,
+        path: `/admin/campaign/${item.id}`,
       });
     },
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteAdvertiser(self.itemToDelete.id).then((response) => {
+        this.api.deleteCampaign(self.itemToDelete.id).then((response) => {
           self.refreshTable();
         });
       }
@@ -192,14 +184,8 @@ export default {
       self.itemToDelete = item;
       self.warningModal = true;
     },
-    onAddCampaign(item) {
-      var self = this;
-      self.$router.push({
-        path: `/admin/campaign/0/advertiser/${item.id}`,
-      });
-    },
     addNew() {
-      this.$router.push({ path: "/admin/advertiser" });
+      this.$router.push({ path: "/admin/campaign" });
     },
   },
 };
