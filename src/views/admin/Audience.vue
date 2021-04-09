@@ -1,5 +1,17 @@
 <template>
   <div>
+    <CToaster :autohide="3000">
+      <template v-for="info in infoList">
+        <CToast
+          :key="info.message"
+          :show="true"
+          :header="info.header"
+          :color="info.color"
+        >
+          {{ info.message }}.
+        </CToast>
+      </template>
+    </CToaster>
     <CRow>
       <CCol sm="12">
         <CCard>
@@ -58,6 +70,7 @@ export default {
   name: "Audience",
   data: () => {
     return {
+      infoList: [],
       organizationTypeList: [],
       api: new TatApi(),
       obj: {
@@ -96,18 +109,38 @@ export default {
       evt.preventDefault();
       var self = this;
       if (self.obj.id == "") {
-        this.api.createAudience(self.obj).then((response) => {
-          self.$router.push({ path: "/admin/audiencelist" });
-        });
+        this.api
+          .createAudience(self.obj)
+          .then((response) => {
+            self.$router.push({ path: "/admin/audiencelist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       } else {
-        this.api.updateAudience(self.obj).then((response) => {
-          self.$router.push({ path: "/admin/audiencelist" });
-        });
+        this.api
+          .updateAudience(self.obj)
+          .then((response) => {
+            self.$router.push({ path: "/admin/audiencelist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
     },
     onReset(evt) {
       evt.preventDefault();
       this.obj = {};
+    },
+    toast(header, message, color) {
+      var self = this;
+      self.infoList.push({
+        header: header,
+        message: message,
+        color: color,
+      });
     },
   },
 };

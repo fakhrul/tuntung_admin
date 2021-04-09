@@ -20,18 +20,25 @@
             <CCardBody>
               <CForm>
                 <CInput label="Id" v-model="obj.id" horizontal plaintext />
-                <CInput
+                <!-- <CInput
                   label="Advertiser Id"
                   v-model="obj.advertiser_id"
                   horizontal
                   readonly
-                />
+                /> -->
                 <CInput
+                  description="Must have advertiser, please click Search button to select."
                   label="Advertiser Name"
-                  v-model="advertiser.name"
+                  v-model="obj.advertiser.name"
                   horizontal
                   readonly
-                />
+                >
+                  <template #append>
+                    <CButton color="primary" @click="onSearchAdvertiser()">
+                      <CIcon name="cil-magnifying-glass" /> Search
+                    </CButton>
+                  </template>
+                </CInput>
                 <CInput
                   label="Campaign Name"
                   horizontal
@@ -74,7 +81,7 @@
                   label="Status"
                   horizontal
                   :options="['', 'New']"
-                  :value.sync="obj.country"
+                  :value.sync="obj.status"
                 />
                 <CRow form class="form-group">
                   <CCol tag="label" sm="3" class="col-form-label">
@@ -82,7 +89,8 @@
                   </CCol>
                   <CCol sm="9">
                     <CDataTable
-                      :items="obj.scheduleList"
+                      :items="obj.campaign_schedule_list"
+                      :fields="campaign_schedule_fields"
                       striped
                       caption="Striped Table"
                     />
@@ -161,15 +169,58 @@
           </CCol>
         </CRow>
       </CModal>
+
+      <CModal
+        title="Search for Advertiser"
+        :show.sync="advertiserSearchPopup"
+        size="xl"
+      >
+        <CRow>
+          <CCol sm="12">
+            <CCard>
+              <!-- <CCardHeader> <strong> Campaign </strong> List </CCardHeader> -->
+              <CCardBody>
+                <CDataTable
+                  :items="advertiserList"
+                  :fields="advertiserFieldList"
+                  column-filter
+                  table-filter
+                  items-per-page-select
+                  :items-per-page="10"
+                  hover
+                  sorter
+                  pagination
+                >
+                  <template #show_details="{item, index}">
+                    <td class="py-2">
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        square
+                        size="sm"
+                        @click="onAdvertiserSelected(item, index)"
+                      >
+                        Select
+                      </CButton>
+                    </td>
+                  </template>
+                </CDataTable>
+              </CCardBody>
+              <CCardFooter> </CCardFooter>
+            </CCard>
+          </CCol>
+        </CRow>
+      </CModal>
+
       <CModal
         title="Add Schedule"
         :show.sync="addSchedulePopup"
-        size="xl"
+        size="sm"
         @update:show="onAddConfirmation"
       >
         <CForm>
           <CInput
-            label="Start Date"
+            label="Date"
             type="date"
             horizontal
             v-model="newSchedule.start_date"
@@ -180,12 +231,12 @@
             horizontal
             v-model="newSchedule.start_time"
           />
-          <CInput
+          <!-- <CInput
             label="End Date"
             type="date"
             horizontal
             v-model="newSchedule.end_date"
-          />
+          /> -->
           <CInput
             label="End Time"
             type="time"
@@ -202,6 +253,20 @@
 import TatApi from "../../lib/tatapi";
 import moment from "moment";
 
+const advertiserList = [];
+const advertiserFieldList = [
+  { key: "name", _style: "min-width:200px;" },
+  // { key: "location", _style: "min-width:200px;" },
+  // { key: "id", _style: "min-width:50px" },
+  {
+    key: "show_details",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
+];
+
 const audienceList = [];
 const audienceFieldList = [
   { key: "name", _style: "min-width:200px;" },
@@ -216,17 +281,35 @@ const audienceFieldList = [
   },
 ];
 
+const campaign_schedule_fields = [
+  { key: "start_at", _style: "min-width:200px;" },
+  { key: "end_at", _style: "min-width:200px;" },
+  {
+    key: "remove",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
+];
+
 export default {
   name: "Campaign",
   data: () => {
     return {
+      campaign_schedule_fields,
       addSchedulePopup: false,
       newSchedule: {
         start_date: "",
         start_time: "",
-        end_date: "",
+        // end_date: "",
         end_time: "",
       },
+      advertiserSearchPopup: false,
+      advertiserList: advertiserList.map((item, id) => {
+        return { ...item, id };
+      }),
+      advertiserFieldList,
       audienceSearchPopup: false,
       audienceList: audienceList.map((item, id) => {
         return { ...item, id };
@@ -234,15 +317,23 @@ export default {
       audienceFieldList,
       infoList: [],
       api: new TatApi(),
-      advertiser: {},
+      // advertiser: {},
       audienceInfo: "",
       obj: {
         id: "",
         advertiser_id: "",
+        advertiser: {
+          id: "",
+          name: "",
+        },
         audience_id: "",
-        audience_name: "",
+        audience: {
+          id: "",
+          name: "",
+        },
+        // audience_name: "",
         audience_location: "",
-        scheduleList: [],
+        campaign_schedule_list: [],
         // name: "",
         // profile: {
         //   id: "",
@@ -258,24 +349,34 @@ export default {
   },
   mounted() {
     var self = this;
-    // self.refreshOrganizationType();
-    // console.log(self.$route.params);
     if (self.$route.params.id == 0) self.$route.params.id = "";
     if (self.$route.params.id) {
       this.api
         .getCampaign(self.$route.params.id)
         .then((response) => {
           self.obj = response.data;
+          // self.obj.audience_id = self.audienceList[index].id;
+          // self.obj.audience_name = self.audienceList[index].name;
+          // self.obj.audience_location = self.audienceList[index].location;
+          self.audienceInfo =
+            self.obj.audience.name + " at " + self.obj.audience.location;
+          console.log(self.obj);
         })
         .catch(({ data }) => {
           self.toast("Error", data.message, "danger");
           // console.log(data);
         });
     } else {
-      self.obj.advertiser_id = self.$route.params.advertiserId;
-      this.api.getAdvertiser(self.obj.advertiser_id).then((response) => {
-        self.advertiser = response.data;
-      });
+      if (self.$route.params.advertiserId == 0)
+        self.$route.params.advertiserId = "";
+
+      if (self.$route.params.advertiserId) {
+        self.obj.advertiser_id = self.$route.params.advertiserId;
+        this.api.getAdvertiser(self.obj.advertiser_id).then((response) => {
+          self.obj.advertiser = response.data;
+        });
+      } else {
+      }
     }
   },
   methods: {
@@ -333,20 +434,45 @@ export default {
           // console.log(data);
         });
     },
+    refreshTableAdvertiser() {
+      var self = this;
+      self.api
+        .getAdvertiserList()
+        .then((response) => {
+          self.advertiserList = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
+    },
     onSearchAudience() {
       var self = this;
       self.refreshTableAudience();
       self.audienceSearchPopup = true;
     },
+    onSearchAdvertiser() {
+      var self = this;
+      self.refreshTableAdvertiser();
+      self.advertiserSearchPopup = true;
+    },
     onAudienceSelected(item, index) {
       var self = this;
       self.obj.audience_id = self.audienceList[index].id;
-      self.obj.audience_name = self.audienceList[index].name;
-      self.obj.audience_location = self.audienceList[index].location;
+      self.obj.audience = self.audienceList[index];
+      // self.obj.audience_name = self.audienceList[index].name;
+      // self.obj.audience_location = self.audienceList[index].location;
       self.audienceInfo =
-        self.obj.audience_name + " at " + self.obj.audience_location;
+        self.obj.audience.name + " at " + self.obj.audience.location;
       self.audienceSearchPopup = false;
     },
+    onAdvertiserSelected(item, index) {
+      var self = this;
+      self.obj.advertiser_id = self.advertiserList[index].id;
+      self.obj.advertiser = self.advertiserList[index];
+      self.advertiserSearchPopup = false;
+    },
+
     onAddSchedule() {
       var self = this;
       self.addSchedulePopup = true;
@@ -357,7 +483,7 @@ export default {
         if (
           self.newSchedule.start_date != "" &&
           self.newSchedule.start_time != "" &&
-          self.newSchedule.end_date != "" &&
+          // self.newSchedule.end_date != "" &&
           self.newSchedule.end_time != ""
         ) {
           console.log(self.newSchedule);
@@ -366,23 +492,23 @@ export default {
             "YYYY-MM-DD hh:mm"
           );
           var end_at = moment(
-            self.newSchedule.end_date + " " + self.newSchedule.end_time,
+            self.newSchedule.start_date + " " + self.newSchedule.end_time,
             "YYYY-MM-DD hh:mm"
           );
-          self.obj.scheduleList.push({
-            start_at: start_at,
-            end_at: end_at,
+          self.obj.campaign_schedule_list.push({
+            start_at: start_at.format("YYYY-MM-DDTHH:mm:ss"),
+            end_at: end_at.format("YYYY-MM-DDTHH:mm:ss"),
             // start_date: self.newSchedule.start_date,
             // start_time: self.newSchedule.start_time,
             // end_date: self.newSchedule.end_date,
             // end_time: self.newSchedule.end_time,
           });
-          console.log(self.obj.scheduleList);
+          console.log(self.obj.campaign_schedule_list);
         }
       }
       self.newSchedule.start_date = "";
       self.newSchedule.start_time = "";
-      self.newSchedule.end_date = "";
+      // self.newSchedule.end_date = "";
       self.newSchedule.end_time = "";
     },
   },
