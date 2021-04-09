@@ -224,38 +224,38 @@ class TatApi {
     }
 
 
-    getLocationList() {
-        var url = apiUrl + 'location';
+    getAdsImageList() {
+        var url = apiUrl + 'ads';
         return api.call('get', url)
             .then(({ data }) => {
                 return data
             });
     }
-    getLocation(id) {
-        var url = apiUrl + 'location/';
+    getAdsImage(id) {
+        var url = apiUrl + 'ads/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
-    deleteLocation(id) {
-        var url = apiUrl + 'location/';
+    deleteAdsImage(id) {
+        var url = apiUrl + 'ads/';
         return api.call('delete', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    updateLocation(data) {
-        var url = apiUrl + 'location/';
+    updateAdsImage(data) {
+        var url = apiUrl + 'ads/';
         return api.call('put', url + data.id, data)
             .then(({ data }) => {
                 return data
             });
     }
 
-    createLocation(data) {
-        var url = apiUrl + 'location';
+    createAdsImage(data) {
+        var url = apiUrl + 'ads';
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

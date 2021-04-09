@@ -59,7 +59,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Ads Images',
-        to: '/admin/rolelist',
+        to: '/admin/imagelist',
         icon: 'cil-puzzle'
       },
       // {
