@@ -21,8 +21,17 @@
                   {{ item.status }}
                 </CBadge>
               </td>
+            </template> -->
+            <template #audience_name="{item}">
+              <td>
+                {{ item.audience.name }}
+              </td>
             </template>
-            -->
+            <template #audience_location="{item}">
+              <td>
+                {{ item.audience.location }}
+              </td>
+            </template>
             <template #show_details="{item, index}">
               <td class="py-2">
                 <CButton
@@ -44,30 +53,35 @@
                 <CCardBody>
                   <CMedia :aside-image-props="{ height: 102 }">
                     <p class="text-muted">Id: {{ item.id }}</p>
-                    <p class="text-muted">Owner Id: {{ item.profile_id }}</p>
                     <p class="text-muted">
-                      Owner Email: {{ item.profile_email }}
-                    </p>
-                    <p class="text-muted">Organization Name: {{ item.name }}</p>
-                    <p class="text-muted">Email: {{ item.email }}</p>
-                    <p class="text-muted">Phone: {{ item.phone }}</p>
-                    <p class="text-muted">Address:</p>
-                    <p class="text-muted">{{ item.address1 }}</p>
-                    <p class="text-muted">{{ item.address2 }}</p>
-                    <p class="text-muted">{{ item.address3 }}</p>
-                    <p class="text-muted">City: {{ item.city }}</p>
-                    <p class="text-muted">Postcode: {{ item.postcode }}</p>
-                    <p class="text-muted">State: {{ item.state }}</p>
-                    <p class="text-muted">Country: {{ item.country }}</p>
-                    <p class="text-muted">
-                      Contact Person Name: {{ item.contact_name }}
+                      Advertiser Id: {{ item.advertiser_id }}
                     </p>
                     <p class="text-muted">
-                      Contact Person Email: {{ item.contact_email }}
+                      Advertiser Name: {{ item.advertiser.name }}
                     </p>
                     <p class="text-muted">
-                      Contact Person Phone: {{ item.contact_phone }}
+                      Audience Id: {{ item.audience.id }}
                     </p>
+                    <p class="text-muted">
+                      Audience Name: {{ item.audience.name }}
+                    </p>
+                    <p class="text-muted">Campaign Name: {{ item.name }}</p>
+                    <p class="text-muted">
+                      Total Walker: {{ item.total_walker }}
+                    </p>
+                    <p class="text-muted">Status: {{ item.status }}</p>
+                    <p class="text-muted">Created At: {{ item.created_at }}</p>
+                    <p class="text-muted">
+                      Schedule:
+                    </p>
+                    <ul id="example-1">
+                      <li
+                        v-for="item in item.campaign_schedule_list"
+                        :key="item.id"
+                      >
+                        From {{ item.start_at }} to {{ item.end_at }}
+                      </li>
+                    </ul>
                     <CButton
                       size="sm"
                       color="info"
@@ -91,13 +105,13 @@
           </CDataTable>
         </CCardBody>
         <CCardFooter>
-          <!-- <CButton type="submit" size="sm" color="primary" @click="addNew"
+          <CButton type="submit" size="sm" color="primary" @click="addNew"
             ><CIcon name="cil-check-circle" /> Add New</CButton
-          > -->
-          <p>
+          >
+          <!-- <p>
             NOTES: To add new campaign, you must go to profile list and show
             details.
-          </p>
+          </p> -->
         </CCardFooter>
       </CCard>
       <CModal
@@ -106,7 +120,7 @@
         :show.sync="warningModal"
         @update:show="onDeleteConfirmation"
       >
-        Are you sure you want to delete this {{ itemToDelete.code }} ?
+        Are you sure you want to delete this {{ itemToDelete.name }} ?
       </CModal>
     </CCol>
   </CRow>
@@ -118,10 +132,15 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
-  { key: "id", _style: "min-width:200px;" },
-  // { key: "profile_id", _style: "min-width:200px;" },
-  { key: "profile_email", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
+  { key: "audience_id", _style: "min-width:200px;" },
+  { key: "audience_name", _style: "min-width:200px;" },
+  { key: "audience_location", _style: "min-width:200px;" },
+  { key: "total_walker", _style: "min-width:200px;" },
+  // { key: "profile_id", _style: "min-width:200px;" },
+  // { key: "profile_email", _style: "min-width:200px;" },
+  { key: "created_at", _style: "min-width:200px;" },
+  // { key: "name", _style: "min-width:200px;" },
   {
     key: "show_details",
     label: "",
@@ -162,6 +181,7 @@ export default {
       var self = this;
       self.api.getCampaignList().then((response) => {
         self.items = response.data;
+        console.log(self.items);
       });
     },
     onEdit(item) {

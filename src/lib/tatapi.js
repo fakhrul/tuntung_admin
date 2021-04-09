@@ -45,8 +45,6 @@ class TatApi {
 
     createProfile(data) {
         var url = apiUrl + 'profile';
-        console.log(url)
-        console.log(data)
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data
@@ -143,31 +141,31 @@ class TatApi {
 
     }
 
-    getOrganizationType(id) {
-        var url = apiUrl + 'organizationType/';
+    getCampaign(id) {
+        var url = apiUrl + 'campaign/';
         return api.call('get', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    getOrganizationTypeList() {
-        var url = apiUrl + 'organizationType';
+    getCampaignList() {
+        var url = apiUrl + 'campaign';
         return api.call('get', url)
             .then(({ data }) => {
                 return data
             });
     }
-    deleteOrganizationType(id) {
-        var url = apiUrl + 'organizationType/';
+    deleteCampaign(id) {
+        var url = apiUrl + 'campaign/';
         return api.call('delete', url + id)
             .then(({ data }) => {
                 return data
             });
     }
 
-    updateOrganizationType(data) {
-        var url = apiUrl + 'organizationType/';
+    updateCampaign(data) {
+        var url = apiUrl + 'campaign/';
         return api.call('put', url + data.id, data)
             .then(({ data }) => {
                 return data
@@ -175,8 +173,8 @@ class TatApi {
     }
 
 
-    createOrganizationType(data) {
-        var url = apiUrl + 'organizationType';
+    createCampaign(data) {
+        var url = apiUrl + 'campaign';
         return api.call('post', url, data)
             .then(({ data }) => {
                 return data

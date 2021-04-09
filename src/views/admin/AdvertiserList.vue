@@ -74,7 +74,7 @@
                       class="ml-1"
                       @click="onAddCampaign(item)"
                     >
-                      Add Advertiser
+                      Add Campaign
                     </CButton>
                     <CButton
                       size="sm"
