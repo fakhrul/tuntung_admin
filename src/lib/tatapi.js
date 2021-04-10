@@ -238,6 +238,15 @@ class TatApi {
                 return data
             });
     }
+    getAdsImageUrl(id) {
+        var url = apiUrl + 'ads/image/';
+        return url + id;
+        // return api.call('get', url + id)
+        //     .then(({ data }) => {
+        //         return data
+        //     });
+    }
+
     deleteAdsImage(id) {
         var url = apiUrl + 'ads/';
         return api.call('delete', url + id)

@@ -15,14 +15,11 @@
             sorter
             pagination
           >
-            <!-- <template #status="{item}">
+            <template #advertiser="{item}">
               <td>
-                <CBadge :color="getBadge(item.status)">
-                  {{ item.status }}
-                </CBadge>
+                {{ item.advertiser.name }}
               </td>
             </template>
-            -->
             <template #show_details="{item, index}">
               <td class="py-2">
                 <CButton
@@ -43,10 +40,15 @@
               >
                 <CCardBody>
                   <CMedia :aside-image-props="{ height: 102 }">
-                    <h4>
-                      {{ item.code }}
-                    </h4>
                     <p class="text-muted">Name: {{ item.name }}</p>
+                    <p>
+                      <CImg
+                        :src="item.imageUrl"
+                        size="sm"
+                        class="mb-2"
+                        thumbnail
+                      />
+                    </p>
                     <CButton
                       size="sm"
                       color="info"
@@ -93,8 +95,9 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
+  { key: "id", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
-  // { key: "id", _style: "min-width:50px" },
+  { key: "advertiser", _style: "min-width:50px" },
   {
     key: "show_details",
     label: "",
@@ -113,6 +116,7 @@ export default {
       }),
       fields,
       details: [],
+      imageUrl: "",
       collapseDuration: 0,
       api: new TatApi(),
       warningModal: false,
@@ -130,11 +134,19 @@ export default {
       this.$nextTick(() => {
         this.collapseDuration = 0;
       });
+
+      // if (item._toggled) {
+      //   var self = this;
+      //   self.refreshImage(item.id);
+      // }
     },
     refreshTable() {
       var self = this;
       self.api.getAdsImageList().then((response) => {
         self.items = response.data;
+        for (var i in self.items) {
+          self.items[i].imageUrl = self.api.getAdsImageUrl(self.items[i].id);
+        }
       });
     },
     onEdit(item) {
