@@ -1,5 +1,17 @@
 <template>
   <div>
+    <CToaster :autohide="3000">
+      <template v-for="info in infoList">
+        <CToast
+          :key="info.message"
+          :show="true"
+          :header="info.header"
+          :color="info.color"
+        >
+          {{ info.message }}.
+        </CToast>
+      </template>
+    </CToaster>
     <CRow>
       <CCol sm="12">
         <CCard>
@@ -160,6 +172,7 @@ export default {
     return {
       // organizationList: [],
       // roleList: [],
+      infoList: [],
       api: new TatApi(),
       password: "",
       isResetPassword: false,
@@ -184,23 +197,29 @@ export default {
     // self.refreshOrganization();
     // self.refreshRole();
     if (self.$route.params.id) {
-      this.api.getProfile(self.$route.params.id).then((response) => {
-        self.obj = response.data;
-        console.log(self.obj);
-        // self.api.getRoleList().then((response) => {
-        //   for (var i in response.data) {
-        //     var isAvailable = self.containsObject(
-        //       response.data[i].id,
-        //       self.obj.roleList
-        //     );
-        //     self.roleList.push({
-        //       value: response.data[i].id,
-        //       label: response.data[i].name,
-        //       checked: isAvailable,
-        //     });
-        //   }
-        // });
-      });
+      this.api
+        .getProfile(self.$route.params.id)
+        .then((response) => {
+          self.obj = response.data;
+          console.log(self.obj);
+          // self.api.getRoleList().then((response) => {
+          //   for (var i in response.data) {
+          //     var isAvailable = self.containsObject(
+          //       response.data[i].id,
+          //       self.obj.roleList
+          //     );
+          //     self.roleList.push({
+          //       value: response.data[i].id,
+          //       label: response.data[i].name,
+          //       checked: isAvailable,
+          //     });
+          //   }
+          // });
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     } else {
       self.isResetPassword = true;
       self.isDisableResetPassword = true;
@@ -225,20 +244,40 @@ export default {
       }
 
       if (self.obj.id == "") {
-        this.api.createProfile(self.obj).then((response) => {
-          self.obj = {};
-          self.$router.push({ path: "/admin/profilelist" });
-        });
+        this.api
+          .createProfile(self.obj)
+          .then((response) => {
+            self.obj = {};
+            self.$router.push({ path: "/admin/profilelist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       } else {
-        this.api.updateProfile(self.obj).then((response) => {
-          self.obj = {};
-          self.$router.push({ path: "/admin/profilelist" });
-        });
+        this.api
+          .updateProfile(self.obj)
+          .then((response) => {
+            self.obj = {};
+            self.$router.push({ path: "/admin/profilelist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
     },
     onReset(evt) {
       evt.preventDefault();
       this.obj = {};
+    },
+    toast(header, message, color) {
+      var self = this;
+      self.infoList.push({
+        header: header,
+        message: message,
+        color: color,
+      });
     },
   },
 };

@@ -1,6 +1,18 @@
 <template>
   <div class="c-app flex-row align-items-center">
     <CContainer>
+      <CToaster :autohide="3000">
+        <template v-for="info in infoList">
+          <CToast
+            :key="info.message"
+            :show="true"
+            :header="info.header"
+            :color="info.color"
+          >
+            {{ info.message }}.
+          </CToast>
+        </template>
+      </CToaster>
       <CRow class="justify-content-center">
         <CCol md="8">
           <CCardGroup>
@@ -87,6 +99,8 @@ export default {
   name: "Login",
   data: () => {
     return {
+      infoList: [],
+
       obj: {
         // email: "admin@test.com",
         // password: "password",
@@ -112,10 +126,24 @@ export default {
         email: self.obj.email,
         password: self.obj.password,
       };
-      auth.doLoginAdmin(data).then((response) => {
-        auth.recordLogin(response.token, response.profile);
-        self.$router.push({ path: "/dashboard" });
-        // self.$router.push({ path: "/" });
+      auth
+        .doLoginAdmin(data)
+        .then((response) => {
+          auth.recordLogin(response.token, response.profile);
+          self.$router.push({ path: "/dashboard" });
+          // self.$router.push({ path: "/" });
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
+    },
+    toast(header, message, color) {
+      var self = this;
+      self.infoList.push({
+        header: header,
+        message: message,
+        color: color,
       });
     },
   },

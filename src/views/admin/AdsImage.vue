@@ -175,9 +175,15 @@ export default {
     var self = this;
     // self.refreshOrganizationType();
     if (self.$route.params.id) {
-      this.api.getAdsImage(self.$route.params.id).then((response) => {
-        self.obj = response.data;
-      });
+      this.api
+        .getAdsImage(self.$route.params.id)
+        .then((response) => {
+          self.obj = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     }
   },
   methods: {
@@ -219,9 +225,15 @@ export default {
             // console.log(data);
           });
       } else {
-        this.api.updateAdsImage(self.obj).then((response) => {
-          self.$router.push({ path: "/admin/imagelist" });
-        });
+        this.api
+          .updateAdsImage(self.obj)
+          .then((response) => {
+            self.$router.push({ path: "/admin/imagelist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
     },
     onReset(evt) {

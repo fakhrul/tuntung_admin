@@ -20,6 +20,11 @@
                 {{ item.advertiser.name }}
               </td>
             </template>
+            <template #show_image="{item, index}">
+              <td class="py-2">
+                <CImg :key="item.id" :src="item.imageUrl" />
+              </td>
+            </template>
             <template #show_details="{item, index}">
               <td class="py-2">
                 <CButton
@@ -98,6 +103,8 @@ const fields = [
   { key: "id", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
   { key: "advertiser", _style: "min-width:50px" },
+  { key: "show_image", _style: "min-width:50px" },
+  { key: "created_at", _style: "min-width:200px;" },
   {
     key: "show_details",
     label: "",
@@ -142,12 +149,18 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getAdsImageList().then((response) => {
-        self.items = response.data;
-        for (var i in self.items) {
-          self.items[i].imageUrl = self.api.getAdsImageUrl(self.items[i].id);
-        }
-      });
+      self.api
+        .getAdsImageList()
+        .then((response) => {
+          self.items = response.data;
+          for (var i in self.items) {
+            self.items[i].imageUrl = self.api.getAdsImageUrl(self.items[i].id);
+          }
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     },
     onEdit(item) {
       var self = this;
@@ -158,9 +171,15 @@ export default {
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteAdsImage(self.itemToDelete.id).then((response) => {
-          self.refreshTable();
-        });
+        this.api
+          .deleteAdsImage(self.itemToDelete.id)
+          .then((response) => {
+            self.refreshTable();
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
       self.itemToDelete = {};
     },

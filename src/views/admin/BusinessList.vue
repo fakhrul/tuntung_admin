@@ -93,8 +93,9 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
+  { key: "id", _style: "min-width:50px" },
   { key: "name", _style: "min-width:200px;" },
-  // { key: "id", _style: "min-width:50px" },
+  { key: "created_at", _style: "min-width:200px;" },
   {
     key: "show_details",
     label: "",
@@ -133,9 +134,15 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getBusinessList().then((response) => {
-        self.items = response.data;
-      });
+      self.api
+        .getBusinessList()
+        .then((response) => {
+          self.items = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     },
     onEdit(item) {
       var self = this;
@@ -146,9 +153,15 @@ export default {
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteBusiness(self.itemToDelete.id).then((response) => {
-          self.refreshTable();
-        });
+        this.api
+          .deleteBusiness(self.itemToDelete.id)
+          .then((response) => {
+            self.refreshTable();
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
       self.itemToDelete = {};
     },

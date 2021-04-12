@@ -1,5 +1,17 @@
 <template>
   <div>
+    <CToaster :autohide="3000">
+      <template v-for="info in infoList">
+        <CToast
+          :key="info.message"
+          :show="true"
+          :header="info.header"
+          :color="info.color"
+        >
+          {{ info.message }}.
+        </CToast>
+      </template>
+    </CToaster>
     <CRow>
       <CCol sm="12">
         <CCard>
@@ -62,9 +74,15 @@ export default {
     var self = this;
     // self.refreshOrganizationType();
     if (self.$route.params.id) {
-      this.api.getBusiness(self.$route.params.id).then((response) => {
-        self.obj = response.data;
-      });
+      this.api
+        .getBusiness(self.$route.params.id)
+        .then((response) => {
+          self.obj = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     }
   },
   methods: {
@@ -83,13 +101,25 @@ export default {
       evt.preventDefault();
       var self = this;
       if (self.obj.id == "") {
-        this.api.createBusiness(self.obj).then((response) => {
-          self.$router.push({ path: "/admin/businesslist" });
-        });
+        this.api
+          .createBusiness(self.obj)
+          .then((response) => {
+            self.$router.push({ path: "/admin/businesslist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       } else {
-        this.api.updateBusiness(self.obj).then((response) => {
-          self.$router.push({ path: "/admin/businesslist" });
-        });
+        this.api
+          .updateBusiness(self.obj)
+          .then((response) => {
+            self.$router.push({ path: "/admin/businesslist" });
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
     },
     onReset(evt) {

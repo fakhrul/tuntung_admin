@@ -231,6 +231,15 @@ class TatApi {
                 return data
             });
     }
+
+    getAdsImageListByAdvertiser(id) {
+        var url = apiUrl + '/ads/byAdvertiser/';
+        return api.call('get', url + id)
+            .then(({ data }) => {
+                return data
+            });
+    }
+
     getAdsImage(id) {
         var url = apiUrl + 'ads/';
         return api.call('get', url + id)

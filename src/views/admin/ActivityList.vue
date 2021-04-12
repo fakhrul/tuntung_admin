@@ -1,21 +1,34 @@
 <template>
-  <CRow>
-    <CCol sm="12">
-      <CCard>
-        <CCardHeader> <strong> Activity </strong> List </CCardHeader>
-        <CCardBody>
-          <CDataTable
-            :items="items"
-            :fields="fields"
-            column-filter
-            table-filter
-            items-per-page-select
-            :items-per-page="10"
-            hover
-            sorter
-            pagination
-          >
-            <!-- <template #status="{item}">
+  <div>
+    <CToaster :autohide="3000">
+      <template v-for="info in infoList">
+        <CToast
+          :key="info.message"
+          :show="true"
+          :header="info.header"
+          :color="info.color"
+        >
+          {{ info.message }}.
+        </CToast>
+      </template>
+    </CToaster>
+    <CRow>
+      <CCol sm="12">
+        <CCard>
+          <CCardHeader> <strong> Activity </strong> List </CCardHeader>
+          <CCardBody>
+            <CDataTable
+              :items="items"
+              :fields="fields"
+              column-filter
+              table-filter
+              items-per-page-select
+              :items-per-page="10"
+              hover
+              sorter
+              pagination
+            >
+              <!-- <template #status="{item}">
               <td>
                 <CBadge :color="getBadge(item.status)">
                   {{ item.status }}
@@ -23,63 +36,69 @@
               </td>
             </template>
             -->
-            <template #show_details="{item, index}">
-              <td class="py-2">
-                <CButton
-                  color="primary"
-                  variant="outline"
-                  square
-                  size="sm"
-                  @click="toggleDetails(item, index)"
+              <template #show_details="{item, index}">
+                <td class="py-2">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    square
+                    size="sm"
+                    @click="toggleDetails(item, index)"
+                  >
+                    {{ Boolean(item._toggled) ? "Hide" : "Show" }}
+                  </CButton>
+                </td>
+              </template>
+              <template #details="{item}">
+                <CCollapse
+                  :show="Boolean(item._toggled)"
+                  :duration="collapseDuration"
                 >
-                  {{ Boolean(item._toggled) ? "Hide" : "Show" }}
-                </CButton>
-              </td>
-            </template>
-            <template #details="{item}">
-              <CCollapse
-                :show="Boolean(item._toggled)"
-                :duration="collapseDuration"
-              >
-                <CCardBody>
-                  <CMedia :aside-image-props="{ height: 102 }">
-                    <h4>
-                      {{ item.code }}
-                    </h4>
-                    <p class="text-muted">Name: {{ item.name }}</p>
-                    <CButton size="sm" color="info" class="" @click="onEdit(item)">
-                      Edit
-                    </CButton>
-                    <CButton
-                      size="sm"
-                      color="danger"
-                      class="ml-1"
-                      @click="showDeleteConfirmation(item)"
-                    >
-                      Delete
-                    </CButton>
-                  </CMedia>
-                </CCardBody>
-              </CCollapse>
-            </template>
-          </CDataTable>
-        </CCardBody>
-        <CCardFooter>
-          <CButton type="submit" size="sm" color="primary" @click="addNew"
-            ><CIcon name="cil-check-circle" /> Add New</CButton
-          >
-        </CCardFooter>
-      </CCard>
-      <CModal
-        title="Confirm Delete"
-        color="warning"
-        :show.sync="warningModal"
-        @update:show="onDeleteConfirmation"
-      >
-        Are you sure you want to delete this {{ itemToDelete.code }} ?
-      </CModal>
-    </CCol>
-  </CRow>
+                  <CCardBody>
+                    <CMedia :aside-image-props="{ height: 102 }">
+                      <h4>
+                        {{ item.code }}
+                      </h4>
+                      <p class="text-muted">Name: {{ item.name }}</p>
+                      <CButton
+                        size="sm"
+                        color="info"
+                        class=""
+                        @click="onEdit(item)"
+                      >
+                        Edit
+                      </CButton>
+                      <CButton
+                        size="sm"
+                        color="danger"
+                        class="ml-1"
+                        @click="showDeleteConfirmation(item)"
+                      >
+                        Delete
+                      </CButton>
+                    </CMedia>
+                  </CCardBody>
+                </CCollapse>
+              </template>
+            </CDataTable>
+          </CCardBody>
+          <CCardFooter>
+            <CButton type="submit" size="sm" color="primary" @click="addNew"
+              ><CIcon name="cil-check-circle" /> Add New</CButton
+            >
+          </CCardFooter>
+        </CCard>
+        <CModal
+          title="Confirm Delete"
+          color="warning"
+          :show.sync="warningModal"
+          @update:show="onDeleteConfirmation"
+        >
+          Are you sure you want to delete this {{ itemToDelete.code }} ?
+        </CModal>
+      </CCol>
+    </CRow>
+  </div>
 </template>
 
 <script>
@@ -130,22 +149,34 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getActivityList().then((response) => {
-        self.items = response.data;
-      });
+      self.api
+        .getActivityList()
+        .then((response) => {
+          self.items = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     },
-    onEdit(item){
+    onEdit(item) {
       var self = this;
       self.$router.push({
-        path: `/admin/activity/${item.id}`
+        path: `/admin/activity/${item.id}`,
       });
     },
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteActivity(self.itemToDelete.id).then((response) => {
-          self.refreshTable();
-        });
+        this.api
+          .deleteActivity(self.itemToDelete.id)
+          .then((response) => {
+            self.refreshTable();
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
       self.itemToDelete = {};
     },

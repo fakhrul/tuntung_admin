@@ -56,20 +56,17 @@ const Register = () => import('@/views/pages/Register')
 // Users
 // const Users = () => import('@/views/users/Users')
 // const User = () => import('@/views/users/User')
-const UserList = () => import('@/views/admin/UserList')
-const User = () => import('@/views/admin/User')
+// const UserList = () => import('@/views/admin/UserList')
+// const User = () => import('@/views/admin/User')
 
 const CustomPage = () => import('@/views/theme/CustomPage')
 
-// TAT
 const Activity = () => import('@/views/admin/Activity')
 const ActivityList = () => import('@/views/admin/ActivityList')
 
 const Campaign = () => import('@/views/admin/Campaign')
 const CampaignList = () => import('@/views/admin/CampaignList')
 
-// const Organization = () => import('@/views/admin/Organization')
-// const OrganizationList = () => import('@/views/admin/OrganizationList')
 
 const Business = () => import('@/views/admin/Business')
 const BusinessList = () => import('@/views/admin/BusinessList')
@@ -86,19 +83,6 @@ const ProfileList = () => import('@/views/admin/ProfileList')
 const Audience = () => import('@/views/admin/Audience')
 const AudienceList = () => import('@/views/admin/AudienceList')
 
-const Category = () => import('@/views/track/Category')
-const CategoryList = () => import('@/views/track/CategoryList')
-
-const Certification = () => import('@/views/track/Certification')
-const CertificationList = () => import('@/views/track/CertificationList')
-
-const Product = () => import('@/views/track/Product')
-const ProductList = () => import('@/views/track/ProductList')
-
-
-const TrackList = () => import('@/views/track/TrackList')
-const TrackUpdate = () => import('@/views/track/TrackUpdate')
-const TrackHistory = () => import('@/views/track/TrackHistory')
 
 const Notification = () => import('@/views/other/Notification')
 
@@ -165,21 +149,7 @@ function configRoutes() {
             render(c) { return c('router-view') }
           },
           children: [
-            {
-              path: 'user/:id',
-              name: 'User',
-              component: User
-            },
-            {
-              path: 'user',
-              name: 'User',
-              component: User
-            },
-            {
-              path: 'userlist',
-              name: 'UserList',
-              component: UserList
-            },
+
             {
               path: 'activity/:id',
               name: 'Activity',
@@ -295,83 +265,6 @@ function configRoutes() {
               component: AudienceList
             },
 
-          ]
-        },
-        {
-          path: 'track',
-          redirect: '/track/productlist',
-          name: 'Track',
-          component: {
-            render(c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'category',
-              name: 'Category',
-              component: Category
-            },
-            {
-              path: 'category/:id',
-              name: 'Category',
-              component: Category
-            },
-            {
-              path: 'categorylist',
-              name: 'CategoryList',
-              component: CategoryList
-            },
-            {
-              path: 'certification',
-              name: 'Certification',
-              component: Certification
-            },
-            {
-              path: 'certification/:id',
-              name: 'Certification',
-              component: Certification
-            },
-            {
-              path: 'certificationlist',
-              name: 'CertificationList',
-              component: CertificationList
-            },
-            {
-              path: 'product',
-              name: 'Product',
-              component: Product
-            },
-            {
-              path: 'product/:id',
-              name: 'Product',
-              component: Product
-            },
-            {
-              path: 'productlist',
-              name: 'ProductList',
-              component: ProductList
-            },
-
-
-            {
-              path: 'tracklist',
-              name: 'TrackList',
-              component: TrackList
-            },
-            {
-              path: 'trackupdate',
-              name: 'TrackUpdate',
-              component: TrackUpdate
-            },
-            {
-              path: 'trackupdate/:id',
-              name: 'TrackUpdate',
-              component: TrackUpdate
-            },
-            {
-              path: 'history/:id',
-              name: 'TrackHistory',
-              component: TrackHistory
-            }
           ]
         },
         {

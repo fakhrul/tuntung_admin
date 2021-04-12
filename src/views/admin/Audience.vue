@@ -88,9 +88,15 @@ export default {
     var self = this;
     // self.refreshOrganizationType();
     if (self.$route.params.id) {
-      this.api.getAudience(self.$route.params.id).then((response) => {
-        self.obj = response.data;
-      });
+      this.api
+        .getAudience(self.$route.params.id)
+        .then((response) => {
+          self.obj = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     }
   },
   methods: {

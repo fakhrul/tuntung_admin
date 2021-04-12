@@ -15,14 +15,12 @@
             sorter
             pagination
           >
-            <!-- <template #status="{item}">
+            <template #profile_name="{item}">
               <td>
-                <CBadge :color="getBadge(item.status)">
-                  {{ item.status }}
-                </CBadge>
+                {{ item.profile.name }}
               </td>
             </template>
-            -->
+
             <template #show_details="{item, index}">
               <td class="py-2">
                 <CButton
@@ -99,13 +97,13 @@
           </CDataTable>
         </CCardBody>
         <CCardFooter>
-          <!-- <CButton type="submit" size="sm" color="primary" @click="addNew"
+          <CButton type="submit" size="sm" color="primary" @click="addNew"
             ><CIcon name="cil-check-circle" /> Add New</CButton
-          > -->
-          <p>
+          >
+          <!-- <p>
             NOTES: To add new advertiser, you must go to profile list and show
             details.
-          </p>
+          </p> -->
         </CCardFooter>
       </CCard>
       <CModal
@@ -128,8 +126,10 @@ const items = [];
 const fields = [
   { key: "id", _style: "min-width:200px;" },
   // { key: "profile_id", _style: "min-width:200px;" },
-  { key: "profile_email", _style: "min-width:200px;" },
+  { label: "Owner Name", key: "profile_name", _style: "min-width:200px;" },
+  { label: "Owner Email", key: "profile_email", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
+  { key: "created_at", _style: "min-width:200px;" },
   {
     key: "show_details",
     label: "",
@@ -168,9 +168,15 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getAdvertiserList().then((response) => {
-        self.items = response.data;
-      });
+      self.api
+        .getAdvertiserList()
+        .then((response) => {
+          self.items = response.data;
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     },
     onEdit(item) {
       var self = this;
@@ -181,9 +187,15 @@ export default {
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteAdvertiser(self.itemToDelete.id).then((response) => {
-          self.refreshTable();
-        });
+        this.api
+          .deleteAdvertiser(self.itemToDelete.id)
+          .then((response) => {
+            self.refreshTable();
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
       self.itemToDelete = {};
     },

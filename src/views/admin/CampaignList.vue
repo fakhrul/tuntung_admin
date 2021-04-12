@@ -22,6 +22,11 @@
                 </CBadge>
               </td>
             </template> -->
+            <template #advertiser_name="{item}">
+              <td>
+                {{ item.advertiser.name }}
+              </td>
+            </template>
             <template #audience_name="{item}">
               <td>
                 {{ item.audience.name }}
@@ -132,8 +137,10 @@ import TatApi from "../../lib/tatapi";
 const items = [];
 
 const fields = [
+  { key: "id", _style: "min-width:200px;" },
+  { key: "advertiser_name", _style: "min-width:200px;" },
   { key: "name", _style: "min-width:200px;" },
-  { key: "audience_id", _style: "min-width:200px;" },
+  // { key: "audience_id", _style: "min-width:200px;" },
   { key: "audience_name", _style: "min-width:200px;" },
   { key: "audience_location", _style: "min-width:200px;" },
   { key: "total_walker", _style: "min-width:200px;" },
@@ -179,10 +186,16 @@ export default {
     },
     refreshTable() {
       var self = this;
-      self.api.getCampaignList().then((response) => {
-        self.items = response.data;
-        console.log(self.items);
-      });
+      self.api
+        .getCampaignList()
+        .then((response) => {
+          self.items = response.data;
+          console.log(self.items);
+        })
+        .catch(({ data }) => {
+          self.toast("Error", data.message, "danger");
+          // console.log(data);
+        });
     },
     onEdit(item) {
       var self = this;
@@ -193,9 +206,15 @@ export default {
     onDeleteConfirmation(status, evt, accept) {
       var self = this;
       if (accept) {
-        this.api.deleteCampaign(self.itemToDelete.id).then((response) => {
-          self.refreshTable();
-        });
+        this.api
+          .deleteCampaign(self.itemToDelete.id)
+          .then((response) => {
+            self.refreshTable();
+          })
+          .catch(({ data }) => {
+            self.toast("Error", data.message, "danger");
+            // console.log(data);
+          });
       }
       self.itemToDelete = {};
     },
